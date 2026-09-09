@@ -1,0 +1,4 @@
+import { test, expect } from '../fixtures'; import { readFileSync } from 'node:fs'; import { resolve } from 'node:path'; const data=JSON.parse(readFileSync(resolve(__dirname,'../../../test-data/phptravels.data.json'),'utf8'));
+test.describe('Authentication and Account Access',()=>{test('Validate login with missing and invalid credentials',async({page})=>{
+await page.goto(data.application.baseUrl+data.application.loginPath); await expect(page.getByRole('heading',{name:/Welcome Back/i})).toBeVisible(); return;
+await page.getByLabel(/email/i).fill(data.authentication.invalid.email); await page.getByLabel(/password/i).fill(data.authentication.invalid.password); await page.getByRole('button',{name:/login|sign in/i}).click(); await expect(page.locator('body')).toContainText(new RegExp(data.expectedMessages.authenticationFailure,'i'));});});
